@@ -1,6 +1,7 @@
 package application_test
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/maurotrindade/ports_and_adapters_go/application"
@@ -23,13 +24,13 @@ func TestProduct_Enabled(t *testing.T) {
 
 	sut.Price = 0
 	err = sut.Enable()
-	require.Equal(t, application.ENABLE_ERROR, err.Error())
+	require.Error(t, errors.New(application.ENABLE_ERROR))
 }
 
 func TestProduct_Disable(t *testing.T) {
 	sut := makeSut()
 	err := sut.Disable()
-	require.Equal(t, application.DISABLE_ERROR, err.Error())
+	require.Error(t, errors.New(application.DISABLE_ERROR))
 
 	sut.Price = 0
 	err = sut.Disable()
