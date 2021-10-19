@@ -18,7 +18,8 @@ const (
 )
 
 const (
-	ENABLE_ERROR = "The price must be greater than 0 to enabled the product"
+	ENABLE_ERROR  = "The price must be greater than 0 to enabled the product"
+	DISABLE_ERROR = "The price must be 0 to disabled"
 )
 
 type Product struct {
@@ -42,7 +43,11 @@ func (p *Product) Enable() error {
 }
 
 func (p *Product) Disable() error {
-	return errors.New("The price must be greater than 0 to enabled the product")
+	if p.Price == 0 {
+		p.Status = DISABLED
+		return nil
+	}
+	return errors.New(DISABLE_ERROR)
 }
 
 func (p *Product) GetId() string {
