@@ -4,13 +4,14 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/google/uuid"
 	"github.com/maurotrindade/ports_and_adapters_go/application"
 	"github.com/stretchr/testify/require"
 )
 
 func makeSut() application.Product {
 	return application.Product{
-		ID:     "A2S3D4",
+		ID:     uuid.New().String(),
 		Name:   "Teste",
 		Status: application.DISABLED,
 		Price:  10,
@@ -35,4 +36,18 @@ func TestProduct_Disable(t *testing.T) {
 	sut.Price = 0
 	err = sut.Disable()
 	require.Nil(t, err)
+}
+
+func TestProduct_IsValid(t *testing.T) {
+	sut := makeSut()
+	_, err := sut.IsValid()
+	require.Nil(t, err)
+
+	sut.Status = "invalid"
+	_, err = sut.IsValid()
+	require.Error(t, errors.New(application.VALIDATION_STATUS_ERROR))
+
+	sut.Price = -8
+	_, err = sut.IsValid()
+	require.Error(t, errors.New(application.VALIDATION_PRICE_VALUE))
 }
